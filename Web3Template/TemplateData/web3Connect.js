@@ -1,10 +1,19 @@
-if (window.ethereum) {
-  web3 = new Web3(window.ethereum);
-  // connect popup
-  ethereum.enable();
+const net = 'devnet'; 
+const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl(net), 'confirmed');
 
-  window.ethereum.on("accountsChanged", function () {
-    location.reload();
-  });
+async function testSolanaConnection() {
+    const fakePayer = solanaWeb3.Keypair.generate();
+    await connection.confirmTransaction(
+        await connection.requestAirdrop(fakePayer.publicKey, 2000000000),
+        "confirmed"
+    );
+    fakerPayerBalance = await connection.getBalance(fakePayer.publicKey);
 
-}
+    if (fakerPayerBalance == 2000000000) {
+        console.log("Successfully airdroped 2 Solana from Unity")
+    } else {
+        console.log("False")
+    }
+} 
+
+testSolanaConnection()
